@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useContext, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 
@@ -26,8 +26,10 @@ import { Input } from "@/components/ui/input";
 import { addUserAction } from "@/lib/actions/user";
 import { UserType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LayoutWrapperContext } from "@/app/components/layout/layout-wrapper";
 
 export const SignupForm = ({ users }: { users: UserType[] }) => {
+  const { setIsLoggedIn } = useContext(LayoutWrapperContext)!;
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -53,6 +55,7 @@ export const SignupForm = ({ users }: { users: UserType[] }) => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     startTransition(async () => {
       const newUser = await addUserAction(values.username, values.password);
+      setIsLoggedIn(true);
       router.push(`/${newUser.id}`);
     });
   };
