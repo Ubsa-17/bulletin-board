@@ -1,6 +1,6 @@
 import { prisma } from "../prisma";
 
-export const getAllComments = async (userId?: string, threadId?: string) => {
+export const getAllCommentsAction = async (userId?: string, threadId?: string) => {
   const comments = await prisma.comment.findMany({
     where: {
       ...(userId !== undefined && { userId }),
@@ -11,13 +11,13 @@ export const getAllComments = async (userId?: string, threadId?: string) => {
   return comments;
 };
 
-export const getComments = async (id: string) => {
+export const getCommentsAction = async (id: string) => {
   const comment = await prisma.comment.findFirst({ where: { id } });
   console.log(comment);
   return comment;
 };
 
-export const addComment = async (
+export const addCommentAction = async (
   content: string,
   userId: string,
   threadId: string
@@ -29,7 +29,7 @@ export const addComment = async (
   return newComment;
 };
 
-export const updateComment = async (id: string, content: string) => {
+export const updateCommentAction = async (id: string, content: string) => {
   const updatedComment = await prisma.comment.update({
     data: { content },
     where: { id },
@@ -38,7 +38,7 @@ export const updateComment = async (id: string, content: string) => {
   return updatedComment;
 };
 
-export const deleteComment = async (id: string) => {
+export const deleteCommentAction = async (id: string) => {
   const deletedComment = await prisma.comment.delete({ where: { id } });
   console.log(deletedComment);
   return deletedComment;

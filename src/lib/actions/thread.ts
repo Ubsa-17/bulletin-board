@@ -1,6 +1,6 @@
 import { prisma } from "../prisma";
 
-export const getAllThreads = async (userId?: string) => {
+export const getAllThreadsAction = async (userId?: string) => {
   const threads = await prisma.thread.findMany({
     where: { ...(userId !== undefined && { userId }) },
   });
@@ -8,13 +8,13 @@ export const getAllThreads = async (userId?: string) => {
   return threads;
 };
 
-export const getThread = async (id: string) => {
+export const getThreadAction = async (id: string) => {
   const thread = await prisma.thread.findFirst({ where: { id } });
   console.log(thread);
   return thread;
 };
 
-export const addThread = async (
+export const addThreadAction = async (
   title: string,
   description: string,
   userId: string
@@ -26,7 +26,7 @@ export const addThread = async (
   return newThread;
 };
 
-export const updateThread = async (
+export const updateThreadAction = async (
   id: string,
   title?: string,
   description?: string
@@ -42,7 +42,7 @@ export const updateThread = async (
   return updatedThread;
 };
 
-export const deleteThread = async (id: string) => {
+export const deleteThreadAction = async (id: string) => {
   const deletedThread = await prisma.thread.delete({ where: { id } });
   console.log(deletedThread);
   return deletedThread;

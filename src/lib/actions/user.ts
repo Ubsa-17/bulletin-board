@@ -8,19 +8,19 @@ export const getAllUsersAction = async () => {
   return users;
 };
 
-export const getUser = async (id: string) => {
+export const getUserAction = async (id: string) => {
   const user = await prisma.user.findFirst({ where: { id } });
   console.log(user);
   return user;
 };
 
-export const addUser = async (username: string, password: string) => {
+export const addUserAction = async (username: string, password: string) => {
   const newUser = await prisma.user.create({ data: { username, password } });
   console.log(newUser);
   return newUser;
 };
 
-export const updateUser = async (
+export const updateUserAction = async (
   id: string,
   username?: string,
   password?: string
@@ -36,7 +36,7 @@ export const updateUser = async (
   return updatedUser;
 };
 
-export const deleteUser = async (id: string) => {
+export const deleteUserAction = async (id: string) => {
   const deletedUser = await prisma.user.delete({ where: { id } });
   console.log(deletedUser);
   return deletedUser;
