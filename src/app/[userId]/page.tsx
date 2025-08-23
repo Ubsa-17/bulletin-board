@@ -1,4 +1,5 @@
 import { getUserAction } from "@/lib/actions/user";
+import { LoginControl } from "./components/login-control";
 
 export default async function UserPage({
   params,
@@ -8,5 +9,12 @@ export default async function UserPage({
   const { userId } = await params;
   const user = await getUserAction(userId);
 
-  return <div>{JSON.stringify(user)}</div>;
+  return (
+    <div>
+      <div>{JSON.stringify(user)}</div>
+      <div>
+        <LoginControl />
+      </div>
+    </div>
+  );
 }
