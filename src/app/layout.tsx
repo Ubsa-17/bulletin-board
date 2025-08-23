@@ -3,6 +3,10 @@ import "./globals.css";
 
 import { Noto_Sans_JP } from "next/font/google";
 
+import { LayoutWrapper } from "./components/layout/layout-wrapper";
+import { ThemeProvider } from "./components/theme/theme-provider";
+import { Header } from "./components/layout/header";
+
 const noto_sans_jp = Noto_Sans_JP();
 
 export const metadata: Metadata = {
@@ -16,9 +20,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja">
+    <html lang="ja" suppressHydrationWarning>
       <body className={`${noto_sans_jp.className} antialiased`}>
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LayoutWrapper>
+            <header>
+              <Header />
+            </header>
+            <main>{children}</main>
+          </LayoutWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );

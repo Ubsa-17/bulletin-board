@@ -103,12 +103,14 @@ export const SignupForm = ({ users }: { users: UserType[] }) => {
                 <Button>{isPending ? "Loading..." : "サインアップ"}</Button>
               </form>
             </Form>
-            <Button variant="secondary">キャンセル</Button>
+            <Button variant="secondary">
+              <Link href="/">キャンセル</Link>
+            </Button>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col items-center justify-center">
           <span>アカウントをお持ちですか?</span>
-          <Button variant="ghost">
+          <Button variant="link">
             <Link href="/signin">サインイン</Link>
           </Button>
         </CardFooter>
