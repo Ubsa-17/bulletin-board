@@ -23,24 +23,36 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { addUserAction } from "@/lib/actions/user";
 import { UserType } from "@/types/type";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export const SignupForm = ({ users }: { users: UserType[] }) => {
+export const SigninForm = ({ users }: { users: UserType[] }) => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const formSchema = z.object({
-    username: z
-      .string()
-      .min(1, "ユーザー名を入力してください")
-      .refine(
-        (val) => users.every((user: UserType) => user.username !== val),
-        "そのユーザー名はすでに使用されています"
-      ),
-    password: z.string().min(8, "8文字以上のパスワードを設定してください"),
-  });
+  const formSchema = z
+    .object({
+      username: z
+        .string()
+        .min(1, "ユーザー名を入力してください")
+        .refine(
+          (val) => users.some((user: UserType) => user.username === val),
+          "そのユーザー名は存在しません"
+        ),
+      password: z.string().min(1, "パスワードを入力してください"),
+    })
+    .refine(
+      (data) => {
+        const user = users.find(
+          (user: UserType) => user.username === data.username
+        );
+        return user?.password === data.password;
+      },
+      {
+        message: "ユーザー名またはパスワードが正しくありません",
+        path: ["password"],
+      }
+    );
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,8 +64,10 @@ export const SignupForm = ({ users }: { users: UserType[] }) => {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     startTransition(async () => {
-      const newUser = await addUserAction(values.username, values.password);
-      router.push(`/${newUser.id}`);
+      const user = users.find(
+        (user: UserType) => user.username === values.username
+      );
+      router.push(`/${user?.id}`);
     });
   };
 
@@ -61,7 +75,7 @@ export const SignupForm = ({ users }: { users: UserType[] }) => {
     <div className="h-screen flex flex-col items-center justify-center">
       <Card>
         <CardHeader>
-          <CardTitle>サインアップ</CardTitle>
+          <CardTitle>サインイン</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center space-y-2">
@@ -100,16 +114,16 @@ export const SignupForm = ({ users }: { users: UserType[] }) => {
                     </FormItem>
                   )}
                 />
-                <Button>{isPending ? "Loading..." : "サインアップ"}</Button>
+                <Button>{isPending ? "Loading..." : "サインイン"}</Button>
               </form>
             </Form>
             <Button variant="secondary">キャンセル</Button>
           </div>
         </CardContent>
-        <CardFooter className="flex flex-col items-center justify-center">
-          <span>アカウントをお持ちですか?</span>
+        <CardFooter className="w-full flex flex-col items-center justify-center">
+          <span>アカウントをお持ちではないですか?</span>
           <Button variant="ghost">
-            <Link href="/signin">サインイン</Link>
+            <Link href="/signup">サインアップ</Link>
           </Button>
         </CardFooter>
       </Card>
