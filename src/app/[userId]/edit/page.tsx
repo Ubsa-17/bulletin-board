@@ -1,8 +1,6 @@
 import { getUserAction } from "@/lib/actions/user";
 
-import { Profile } from "./components/profile";
-
-export default async function UserPage({
+export default async function EditPage({
   params,
 }: {
   params: Promise<{ userId: string }>;
@@ -12,7 +10,8 @@ export default async function UserPage({
 
   return (
     <div>
-      <div>{user && <Profile user={user} />}</div>
+      <div>{user?.username}</div>
+      <div>{user?.password}</div>
     </div>
   );
 }
